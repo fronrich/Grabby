@@ -3,7 +3,7 @@
 
 ![project logo](https://github.com/fronrich/Grabby/blob/main/Grabby.png?raw=true)
 
-# Grabby - the Google Fonts Downloader
+# Grabby - The Google Fonts Downloader
 
 ## Created by Fronrich Puno
 
