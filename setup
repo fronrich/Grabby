@@ -1,0 +1,80 @@
+#!/bin/bash
+
+style_bold='\033[1;34m'
+style_reset='\033[0m'
+style_blue='\033[0;34m'
+
+echo -e "$style_blue"
+echo "$(<logo.txt)"
+echo -e "$style_reset"
+
+echo "Grabby, the Google Fonts Downloader"
+echo "Created by Fronrich Puno"
+echo "Disclaimer, this is not an offical Google Product."
+echo "It is an open-source alternative to the manual installation of Google Fonts."
+
+echo -e "$style_bold"
+echo "before installing this program, make sure you have the following packages:"
+echo "- git (I also reccomended authenticating before running this script)"
+echo "- python3 (version >= python3.8)"
+echo "- pip3"
+echo -e "$style_reset"
+
+
+
+
+dir=$(pwd)
+
+echo -e "$style_bold"
+echo "Current Directory: $dir"
+echo "Are you okay with installing Grabby to this directory?"
+echo ""
+echo "If not, please move the repo to your desired directory."
+echo -e "$style_reset"
+
+echo "Press [Enter] to continue with the installation."
+
+read cont
+
+# install packages
+echo "Installing Required Packages"
+
+pip3 install -r requirements.txt 
+
+echo "Installing Root Packages (For Adding Fonts to /usr/share/fonts)"
+
+sudo pip3 install -r requirements.txt
+
+echo "Writing environment variables."
+
+# write the .env
+cwd="CWD=\"$dir\""
+
+echo "$cwd" > .env
+echo "$(<.env.template)" >> .env
+
+if ! [[ -d ./fonts ]];
+then
+    echo "No repo detected. Downloading the Google Fonts Repo"
+    git clone https://github.com/google/fonts.git
+fi
+# update fonts
+
+echo "Updating font Library"
+python3 update.py
+
+# installing most recent fonts
+echo "Installing the most recent Google Fonts"
+sudo python3 inject.py
+
+# write execution script
+echo "#!/bin/bash" > grabby
+echo "wd=\"$dir\"" >> grabby
+echo "$(<grabby.template)" >> grabby
+
+# move grabby to exec path
+echo "adding 'grabby' command to /usr/bin"
+
+sudo mv grabby /usr/bin
+
+echo -e "Installation complete! Whenever you want to get the latest Google Fonts, just run $style_bold 'grabby' $style_reset in the terminal!"

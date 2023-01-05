@@ -1,0 +1,2 @@
+python3 "$wd/update.py"
+sudo python3 "$wd/inject.py"
